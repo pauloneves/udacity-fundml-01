@@ -46,7 +46,7 @@ input("Aperte Enter para continuar...")
 
 print("\nTAREFA 2: Imprimindo o gênero das primeiras 20 amostras")
 for dado in data_list[:20]:
-    print(dado)
+    print(dado[-2])
 
 
 
@@ -85,7 +85,7 @@ input("Aperte Enter para continuar...")
 # Agora sabemos como acessar as features, vamos contar quantos Male (Masculinos) e Female (Femininos) o dataset tem
 # TAREFA 4
 # TODO: Conte cada gênero. Você não deveria usar uma função para isso.
-def count(values_list: list, value: str) -> int:
+def count_usando_loop(values_list: list, value: str) -> int:
     """ Conta número de vezes que valor está presente
     Argumentos:
         values_list: Lista de valores.
@@ -99,8 +99,8 @@ def count(values_list: list, value: str) -> int:
             num += 1
     return num
 
-male = count(column_to_list(data_list, -2), 'Male')
-female = count(column_to_list(data_list, -2), 'Female')
+male = count_usando_loop(column_to_list(data_list, -2), 'Male')
+female = count_usando_loop(column_to_list(data_list, -2), 'Female')
 
 
 # Verificando o resultado
@@ -126,8 +126,8 @@ def count_gender(data_list: list) -> list:
     """
     gender_index = -2
     genders = column_to_list(data_list, gender_index)
-    male = count(genders, 'Male')
-    female = count(genders, 'Female')
+    male = count_usando_loop(genders, 'Male')
+    female = count_usando_loop(genders, 'Female')
     return [male, female]
 
 
@@ -288,7 +288,7 @@ def count_items(column_list: list) -> tuple:
     item_types = list(set(column_list))
     count_items = []
     for typ in item_types:
-        count_items.append(count(column_list, typ))
+        count_items.append(count_usando_loop(column_list, typ))
     return item_types, count_items
 
 
