@@ -30,8 +30,8 @@ input("Aperte Enter para continuar...")
 # TODO: Imprima as primeiras 20 linhas usando um loop para identificar os dados.
 print("\n\nTAREFA 1: Imprimindo as primeiras 20 amostras")
 #print(data_list[1:21])
-for i in range(1,21):
-    print(data_list[i])
+for dado in data_list[1:21]:
+    print(dado)
 
 # Vamos mudar o data_list para remover o cabeçalho dele.
 colunas = data_list[0]
@@ -45,8 +45,8 @@ input("Aperte Enter para continuar...")
 # TODO: Imprima o `gênero` das primeiras 20 linhas
 
 print("\nTAREFA 2: Imprimindo o gênero das primeiras 20 amostras")
-for i in range(20):
-    print(data_list[i][6])
+for dado in data_list[:20]:
+    print(dado)
 
 
 
@@ -85,8 +85,22 @@ input("Aperte Enter para continuar...")
 # Agora sabemos como acessar as features, vamos contar quantos Male (Masculinos) e Female (Femininos) o dataset tem
 # TAREFA 4
 # TODO: Conte cada gênero. Você não deveria usar uma função para isso.
-male = column_to_list(data_list, -2).count('Male')
-female = column_to_list(data_list, -2).count('Female')
+def count(values_list: list, value: str) -> int:
+    """ Conta número de vezes que valor está presente
+    Argumentos:
+        values_list: Lista de valores.
+        value: valor cuja presença se deseja contar.
+    Retorna:
+        Número de vezes que value está presente em value_list
+    """
+    num = 0
+    for item in values_list:
+        if item == value:
+            num += 1
+    return num
+
+male = count(column_to_list(data_list, -2), 'Male')
+female = count(column_to_list(data_list, -2), 'Female')
 
 
 # Verificando o resultado
@@ -111,9 +125,9 @@ def count_gender(data_list: list) -> list:
         Uma lista de 2 valores, respectivamente, o número de viagens feitas por homens e por mulheres.
     """
     gender_index = -2
-    genders = column_to_list(data_list, -2)
-    male = genders.count('Male')
-    female = genders.count('Female')
+    genders = column_to_list(data_list, gender_index)
+    male = count(genders, 'Male')
+    female = count(genders, 'Female')
     return [male, female]
 
 
@@ -170,10 +184,21 @@ plt.xticks(y_pos, types)
 plt.title('Quantidade por Gênero')
 plt.show(block=True)
 
-input("Aperte Enter para continuar...")
+input("Aperte Enter para continuar....")
 # TAREFA 7
 # TODO: Crie um gráfico similar para user_types. Tenha certeza que a legenda está correta.
 print("\nTAREFA 7: Verifique o gráfico!")
+user_type_list = column_to_list(data_list, -3)
+types = set(user_type_list)
+quantity = list(map(lambda x: user_type_list.count(x), types))
+y_pos = list(range(len(types)))
+plt.bar(y_pos, quantity)
+plt.ylabel('Quantidade')
+plt.xlabel('Tipos de Cliente')
+plt.xticks(y_pos, types)
+plt.title('Viagens por Tipo de Cliente')
+plt.box(False)
+plt.show(block=True)
 
 
 input("Aperte Enter para continuar...")
@@ -199,20 +224,20 @@ max_trip = 0.
 mean_trip = 0.
 median_trip = 0.
 
-trip_duration_list =sorted([int(i) for i in column_to_list(data_list, 2)])
+trip_duration_list = sorted([int(i) for i in column_to_list(data_list, 2)])
 
 min_trip = trip_duration_list[0]
 max_trip = trip_duration_list[-1]
 num_trips = len(trip_duration_list)
-if num_trips % 2 == 0:
-    median_trip = trip_duration_list[num_trips//2]
+if num_trips % 2 == 1:
+    median_trip = trip_duration_list[(num_trips + 1)//2]
 else:
     middle_pos = num_trips//2
-    median_trip = (trip_duration_list[middle_pos] + trip_duration_list[middle_pos + 1]) / 2
+    median_trip = (trip_duration_list[middle_pos - 1] + trip_duration_list[middle_pos]) / 2
 
 #sem usar nem sum()
-for i in trip_duration_list:
-    mean_trip += i
+for duration in trip_duration_list:
+    mean_trip += duration
 mean_trip /= num_trips
 
 print("\nTAREFA 9: Imprimindo o mínimo, máximo, média, e mediana")
@@ -262,8 +287,8 @@ def count_items(column_list: list) -> tuple:
     """
     item_types = list(set(column_list))
     count_items = []
-    for i in item_types:
-        count_items.append(column_list.count(i))
+    for typ in item_types:
+        count_items.append(count(column_list, typ))
     return item_types, count_items
 
 
